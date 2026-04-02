@@ -8,8 +8,8 @@
     "DontPlay"
   ],
   "contact": {
-    "homepage": "https://github.com/Dontplay1003",
-    "sources": "https://github.com/Dontplay1003/Sealdice2MC"
+    "homepage": "https://github.com/Dontplay0112",
+    "sources": "https://github.com/Dontplay0112/Sealdice2MC"
   },
   "license": "MIT",
   "icon": "assets/sealdice2mc/icon.png",
@@ -24,8 +24,8 @@
   ],
   "depends": {
     "fabricloader": ">=0.17.2",
-    "minecraft": "~1.21.1",
-    "java": ">=21",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
     "fabric-api": "*"
   },
   "suggests": {

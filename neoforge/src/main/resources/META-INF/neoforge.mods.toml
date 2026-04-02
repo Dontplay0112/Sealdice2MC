@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "sealdice2mc"
+version = "${version}"
+displayName = "sealdice2MC"
+authors = "DontPlay"
+description = '''
+A mod let you Connect SealDice to Minecraft
+'''
+#logoFile = ""
+
+[[dependencies.sealdice2mc]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sealdice2mc]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "sealdice2mc.mixins.json"

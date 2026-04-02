@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "sealdice2mc",
+  "version": "${version}",
+  "name": "sealdice2MC",
+  "description": "A mod let you Connect SealDice to Minecraft",
+  "authors": [
+    "DontPlay"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Dontplay1003",
+    "sources": "https://github.com/Dontplay1003/Sealdice2MC"
+  },
+  "license": "MIT",
+  "icon": "assets/sealdice2mc/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "top.dontplay.fabric.SealDice2MCFabric"
+    ]
+  },
+  "mixins": [
+    "sealdice2mc.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.17.2",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

@@ -121,7 +121,7 @@ publishMods {
     modLoaders.add("neoforge") 
 
     modrinth {
-        projectId = "sealdice2mc"
+        projectId = "8ScQVxiU"
         accessToken = env.MODRINTH_TOKEN
         minecraftVersions.add(rootProject.minecraft_version)
     }

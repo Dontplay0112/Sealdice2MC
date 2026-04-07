@@ -111,14 +111,14 @@ publishMods {
     // 1. 核心修改：明确指向 fabric 和 neoforge 两个子模块的构建产物
     // 注意：如果你的 neoforge 模块文件夹名字依然叫 forge，请把下面的 :neoforge 改回 :forge
     file = project(":fabric").tasks.remapJar.archiveFile
-    additionalFiles.from(project(":neoforge").tasks.remapJar.archiveFile)
+    additionalFiles.from(project(":forge").tasks.remapJar.archiveFile)
 
     changelog = env.CHANGELOG_TEXT ?: "fix some bugs"
     type = publishType == "release" ? STABLE : (publishType == "beta" ? BETA : ALPHA)
     
     // 2. 核心修改：为发布平台打上正确的加载器标签
     modLoaders.add("fabric")
-    modLoaders.add("neoforge") 
+    modLoaders.add("forge") 
 
     modrinth {
         projectId = "8ScQVxiU"

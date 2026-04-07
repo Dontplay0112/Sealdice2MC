@@ -73,62 +73,63 @@ subprojects {
     }
 }
 
-// publishMods {
-//     // 从环境变量读取信息（如果你通过 GitHub Action 触发的话）
-//     def env = System.getenv()
-//     def publishType = env.RELEASE_TYPE ?: "release"
-    
-//     file = project(":fabric").tasks.remapJar.archiveFile
-//     additionalFiles.from(project(":forge").tasks.remapJar.archiveFile)
-
-//     // 读取根目录的 CHANGELOG.md 作为更新日志
-//     changelog = file("CHANGELOG.md").text 
-//     type = publishType == "release" ? STABLE : (publishType == "beta" ? BETA : ALPHA)
-    
-//     modLoaders.add("fabric")
-//     modLoaders.add("forge")
-//     // 如果你以后移植到了 1.21.1，并且 forge 模块实际上是 neoforge，就加上：
-//     // modLoaders.add("neoforge") 
-
-//     modrinth {
-//         projectId = "这里填你的Modrinth_ID"
-//         accessToken = env.MODRINTH_TOKEN
-//         // 支持的 MC 版本，可以从 gradle.properties 里读
-//         minecraftVersions.add(rootProject.minecraft_version)
-//     }
-
-//     curseforge {
-//         projectId = "这里填你的CurseForge_ID"
-//         accessToken = env.CURSEFORGE_TOKEN
-//         minecraftVersions.add(rootProject.minecraft_version)
-//     }
-// }
-
 publishMods {
     def env = System.getenv()
     def publishType = env.RELEASE_TYPE ?: "release"
+    def fabricStr = "fabric"
+    def forgeStr = "neoforge"
+
+    type = publishType == "release" ? STABLE : (publishType == "beta" ? BETA : ALPHA)
+
+    def cfOptions = curseforgeOptions {
+        accessToken = env.CURSEFORGE_TOKEN
+        projectId = "1503025"
+        minecraftVersions.add(rootProject.minecraft_version)
+    }
+ 
+    // Modrinth options used by both Fabric and Forge
+    def mrOptions = modrinthOptions {
+        accessToken = env.MODRINTH_TOKEN
+        projectId = "8ScQVxiU"
+        minecraftVersions.add(rootProject.minecraft_version)
+    }
     
     // 1. 核心修改：明确指向 fabric 和 neoforge 两个子模块的构建产物
     // 注意：如果你的 neoforge 模块文件夹名字依然叫 forge，请把下面的 :neoforge 改回 :forge
-    file = project(":fabric").tasks.remapJar.archiveFile
-    additionalFiles.from(project(":neoforge").tasks.remapJar.archiveFile)
+    file = project(":"+fabricStr).tasks.remapJar.archiveFile
+    additionalFiles.from(project(":"+forgeStr).tasks.remapJar.archiveFile)
 
     changelog = env.CHANGELOG_TEXT ?: "fix some bugs"
-    type = publishType == "release" ? STABLE : (publishType == "beta" ? BETA : ALPHA)
-    
-    // 2. 核心修改：为发布平台打上正确的加载器标签
-    modLoaders.add("fabric")
-    modLoaders.add("neoforge") 
 
-    modrinth {
-        projectId = "8ScQVxiU"
-        accessToken = env.MODRINTH_TOKEN
-        minecraftVersions.add(rootProject.minecraft_version)
+    // Fabric specific options for CurseForge
+    curseforge("curseforgeFabric") {
+        from cfOptions
+        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        modLoaders.add(fabricStr)
+        requires("fabric-api", "architectury-api")
     }
-
-    curseforge {
-        projectId = "1503025"
-        accessToken = env.CURSEFORGE_TOKEN
-        minecraftVersions.add(rootProject.minecraft_version)
+ 
+    // Forge specific options for CurseForge
+    curseforge("curseforgeForge") {
+        from cfOptions
+        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        modLoaders.add(forgeStr)
+        requires("architectury-api")
+    }
+ 
+    // Fabric specific options for Modrinth
+    modrinth("modrinthFabric") {
+        from mrOptions
+        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        modLoaders.add(fabricStr)
+        requires("fabric-api", "architectury-api")
+    }
+ 
+    // Forge specific options for Modrinth
+    modrinth("modrinthForge") {
+        from mrOptions
+        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        modLoaders.add(forgeStr)
+        requires("architectury-api")
     }
 }

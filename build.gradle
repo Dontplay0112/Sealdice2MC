@@ -78,7 +78,7 @@ publishMods {
     def publishType = env.RELEASE_TYPE ?: "release"
     def fabricStr = "fabric"
     def forgeStr = "forge"
-    def versionBase = rootProject.archives_name + "-" + rootProject.mod_version + "-"
+    def versionBase = rootProject.mod_version + "-"
 
     type = publishType == "release" ? STABLE : (publishType == "beta" ? BETA : ALPHA)
 

@@ -78,6 +78,7 @@ publishMods {
     def publishType = env.RELEASE_TYPE ?: "release"
     def fabricStr = "fabric"
     def forgeStr = "forge"
+    def versionBase = rootProject.archives_name + "-" + rootProject.mod_version + "-"
 
     type = publishType == "release" ? STABLE : (publishType == "beta" ? BETA : ALPHA)
 
@@ -104,6 +105,7 @@ publishMods {
     // Fabric specific options for CurseForge
     curseforge("curseforgeFabric") {
         from cfOptions
+        version = versionBase + fabricStr
         file project(":"+fabricStr).tasks.remapJar.archiveFile
         modLoaders.add(fabricStr)
         requires("fabric-api", "architectury-api")
@@ -112,6 +114,7 @@ publishMods {
     // Forge specific options for CurseForge
     curseforge("curseforgeForge") {
         from cfOptions
+        version = versionBase + forgeStr
         file project(":"+forgeStr).tasks.remapJar.archiveFile
         modLoaders.add(forgeStr)
         requires("architectury-api")
@@ -120,6 +123,7 @@ publishMods {
     // Fabric specific options for Modrinth
     modrinth("modrinthFabric") {
         from mrOptions
+        version = versionBase + fabricStr
         file project(":"+fabricStr).tasks.remapJar.archiveFile
         modLoaders.add(fabricStr)
         requires("fabric-api", "architectury-api")
@@ -128,6 +132,7 @@ publishMods {
     // Forge specific options for Modrinth
     modrinth("modrinthForge") {
         from mrOptions
+        version = versionBase + forgeStr
         file project(":"+forgeStr).tasks.remapJar.archiveFile
         modLoaders.add(forgeStr)
         requires("architectury-api")

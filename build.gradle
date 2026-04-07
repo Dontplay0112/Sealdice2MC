@@ -127,7 +127,7 @@ publishMods {
     }
 
     curseforge {
-        projectId = "394468"
+        projectId = "1503025"
         accessToken = env.CURSEFORGE_TOKEN
         minecraftVersions.add(rootProject.minecraft_version)
     }

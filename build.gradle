@@ -17,7 +17,6 @@ allprojects {
 subprojects {
     apply plugin: 'dev.architectury.loom'
     apply plugin: 'architectury-plugin'
-    apply plugin: 'maven-publish'
 
     base {
         archivesName = "$rootProject.archives_name-$project.name"
@@ -53,24 +52,6 @@ subprojects {
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 17
     }
-
-    // Configure Maven publishing.
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                artifactId = base.archivesName.get()
-                from components.java
-            }
-        }
-
-        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-        repositories {
-            // Add repositories to publish to here.
-            // Notice: This block does NOT have the same function as the block in the top level.
-            // The repositories here will be used for publishing your artifact, not for
-            // retrieving dependencies.
-        }
-    }
 }
 
 publishMods {
@@ -79,8 +60,10 @@ publishMods {
     def fabricStr = "fabric"
     def forgeStr = "forge"
     def versionBase = rootProject.mod_version + "-"
+    def displayNameBase = rootProject.archives_name + " "
 
     type = publishType == "release" ? STABLE : (publishType == "beta" ? BETA : ALPHA)
+    changelog = env.CHANGELOG_TEXT ?: "fix some bugs"
 
     def cfOptions = curseforgeOptions {
         accessToken = env.CURSEFORGE_TOKEN
@@ -94,47 +77,40 @@ publishMods {
         projectId = "8ScQVxiU"
         minecraftVersions.add(rootProject.minecraft_version)
     }
-    
-    // 1. 核心修改：明确指向 fabric 和 neoforge 两个子模块的构建产物
-    // 注意：如果你的 neoforge 模块文件夹名字依然叫 forge，请把下面的 :neoforge 改回 :forge
-    file = project(":"+fabricStr).tasks.remapJar.archiveFile
-    additionalFiles.from(project(":"+forgeStr).tasks.remapJar.archiveFile)
 
-    changelog = env.CHANGELOG_TEXT ?: "fix some bugs"
-
-    // Fabric specific options for CurseForge
     curseforge("curseforgeFabric") {
         from cfOptions
-        version = versionBase + fabricStr
-        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        displayName = displayNameBase + fabricStr + rootProject.mod_version
         modLoaders.add(fabricStr)
         requires("fabric-api", "architectury-api")
+        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        version = versionBase + fabricStr
     }
  
-    // Forge specific options for CurseForge
     curseforge("curseforgeForge") {
         from cfOptions
-        version = versionBase + forgeStr
-        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        displayName = displayNameBase + forgeStr + rootProject.mod_version
         modLoaders.add(forgeStr)
         requires("architectury-api")
+        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        version = versionBase + forgeStr
     }
  
-    // Fabric specific options for Modrinth
     modrinth("modrinthFabric") {
         from mrOptions
-        version = versionBase + fabricStr
-        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        displayName = displayNameBase + fabricStr + rootProject.mod_version
         modLoaders.add(fabricStr)
         requires("fabric-api", "architectury-api")
+        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        version = versionBase + fabricStr
     }
  
-    // Forge specific options for Modrinth
     modrinth("modrinthForge") {
         from mrOptions
-        version = versionBase + forgeStr
-        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        displayName = displayNameBase + forgeStr + rootProject.mod_version
         modLoaders.add(forgeStr)
         requires("architectury-api")
+        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        version = versionBase + forgeStr
     }
 }

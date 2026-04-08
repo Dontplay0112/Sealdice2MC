@@ -82,7 +82,7 @@ publishMods {
         from cfOptions
         version = versionBase + fabricStr
         displayName = displayNameBase + fabricStr + rootProject.mod_version
-        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        file.set(project(":"+fabricStr).tasks.remapJar.archiveFile)
         modLoaders.add(fabricStr)
         requires("fabric-api", "architectury-api")
     }
@@ -91,7 +91,7 @@ publishMods {
         from cfOptions
         version = versionBase + forgeStr
         displayName = displayNameBase + forgeStr + rootProject.mod_version
-        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        file.set(project(":"+forgeStr).tasks.remapJar.archiveFile)
         modLoaders.add(forgeStr)
         requires("architectury-api")
     }
@@ -100,7 +100,7 @@ publishMods {
         from mrOptions
         version = versionBase + fabricStr
         displayName = displayNameBase + fabricStr + rootProject.mod_version
-        file project(":"+fabricStr).tasks.remapJar.archiveFile
+        file.set(project(":"+fabricStr).tasks.remapJar.archiveFile)
         modLoaders.add(fabricStr)
         requires("fabric-api", "architectury-api")
     }
@@ -109,7 +109,7 @@ publishMods {
         from mrOptions
         version = versionBase + forgeStr
         displayName = displayNameBase + forgeStr + rootProject.mod_version
-        file project(":"+forgeStr).tasks.remapJar.archiveFile
+        file.set(project(":"+forgeStr).tasks.remapJar.archiveFile)
         modLoaders.add(forgeStr)
         requires("architectury-api")
     }
